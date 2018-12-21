@@ -4,9 +4,9 @@ namespace App\Models;
 
 interface ISettings {
     
-    public function get(string $key = NULL);
+    public function get($key = NULL);
     
-    public function set(Array $settings);
+    public function set($settings);
     
     public function save();
 }

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace TritonTel\Models;
 
-use App\Models\Settings;
+use TritonTel\Models\Settings;
 
 class SmsServiceSettings extends Settings {
     
     protected $host;
     
-    function __construct(string $host) {
+    function __construct($host) {
         $this->host = $host;
     }
     
@@ -26,7 +26,7 @@ class SmsServiceSettings extends Settings {
             ];
     }
 
-    protected function saveSettings(array $settings) {
+    protected function saveSettings($settings) {
         echo '|saving settings|';
         var_dump($settings);
         return true;

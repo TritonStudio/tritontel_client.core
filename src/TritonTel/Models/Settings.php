@@ -1,5 +1,5 @@
 <?php
-namespace App\Models;
+namespace TritonTel\Models;
 
 abstract class Settings implements ISettings {
     
@@ -19,7 +19,7 @@ abstract class Settings implements ISettings {
         return $this->get(self::FIELD_KEY_HOST);
     }
     
-    public function setHost(string $host){
+    public function setHost($host){
         $this->settings[self::FIELD_KEY_HOST] = $host;
     }
     
@@ -27,7 +27,7 @@ abstract class Settings implements ISettings {
         return $this->get(self::FIELD_KEY_REGISTER_ENDPOINT);
     }
     
-    public function setRegisterEndpoint(string $registerEndpoint){
+    public function setRegisterEndpoint($registerEndpoint){
         $this->settings[self::FIELD_KEY_REGISTER_ENDPOINT] = $registerEndpoint;
     }
     
@@ -35,7 +35,7 @@ abstract class Settings implements ISettings {
         return $this->get(self::FIELD_KEY_SECRET_CODES_SEND_ENDPOINT);
     }
     
-    public function setSendSecretCodeEndpoint(string $sendSecretCodeEndpoint){
+    public function setSendSecretCodeEndpoint($sendSecretCodeEndpoint){
         $this->settings[self::FIELD_KEY_SECRET_CODES_SEND_ENDPOINT] = $sendSecretCodeEndpoint;
     }
     
@@ -43,7 +43,7 @@ abstract class Settings implements ISettings {
         return $this->get(self::FIELD_KEY_SECRET_CODES_VERIFY_ENDPOINT);
     }
     
-    public function setVerifySecretCodeEndpoint(string $verifySecretCodeEndpoint){
+    public function setVerifySecretCodeEndpoint($verifySecretCodeEndpoint){
         $this->settings[self::FIELD_KEY_SECRET_CODES_VERIFY_ENDPOINT] = $verifySecretCodeEndpoint;
     }
     
@@ -51,7 +51,7 @@ abstract class Settings implements ISettings {
         return $this->get(self::FIELD_KEY_MESSAGES_SEND_ENDPOINT);
     }
     
-    public function setSendMessagesEndpoint(string $sendMessagesEndpoint){
+    public function setSendMessagesEndpoint($sendMessagesEndpoint){
         $this->settings[self::FIELD_KEY_MESSAGES_SEND_ENDPOINT] = $sendMessagesEndpoint;
     }
     
@@ -59,7 +59,7 @@ abstract class Settings implements ISettings {
         return $this->get(self::FIELD_KEY_GET_COMPANY_DATA_ENDPOINT);
     }
     
-    public function setGetCompanyDataEndpoint(string $getCompanyDataEndpoint){
+    public function setGetCompanyDataEndpoint($getCompanyDataEndpoint){
         $this->settings[self::FIELD_KEY_GET_COMPANY_DATA_ENDPOINT] = $getCompanyDataEndpoint;
     }
     
@@ -67,7 +67,7 @@ abstract class Settings implements ISettings {
         return $this->get(self::FIELD_KEY_LOGOUT_ENDPOINT);
     }
     
-    public function setLogoutEndpoint(string $logoutEndpoint){
+    public function setLogoutEndpoint($logoutEndpoint){
         $this->settings[self::FIELD_KEY_LOGOUT_ENDPOINT] = $logoutEndpoint;
     }
     
@@ -75,11 +75,11 @@ abstract class Settings implements ISettings {
         return $this->get(self::FIELD_KEY_TOKEN);
     }
     
-    public function setToken(string $token){
+    public function setToken($token){
         $this->settings[self::FIELD_KEY_TOKEN] = $token;
     }
     
-    public function get(string $key = NULL){
+    public function get($key = NULL){
         if(empty($this->settings)){
             $this->settings = $this->loadSettings();
         }
@@ -92,7 +92,7 @@ abstract class Settings implements ISettings {
         return $this->settings;
     }
     
-    public function set(Array $settings){
+    public function set($settings){
         $this->settings = $settings;
         return $this->saveSettings($settings);
     }
@@ -103,5 +103,5 @@ abstract class Settings implements ISettings {
     
     abstract protected function loadSettings();
     
-    abstract protected function saveSettings(Array $settings);
+    abstract protected function saveSettings($settings);
 }
