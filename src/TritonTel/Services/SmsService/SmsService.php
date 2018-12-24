@@ -3,7 +3,7 @@
 namespace TritonTel\Services\SmsService;
 
 use Http\Message\Authentication\Bearer;
-use TritonTel\Services\HttpRequestFactory;
+use Http\Discovery\MessageFactoryDiscovery;
 
 class SmsService implements ISmsService{
     
@@ -46,8 +46,11 @@ class SmsService implements ISmsService{
         }else{
             $httpClient = $this->httpRequestService->getHttpClient();
         }
-        $request = HttpRequestFactory::create('POST', $url, [], ($data == null ? null : json_encode($data)));
+        $request = MessageFactoryDiscovery::find()->createRequest('POST', $url, [], ($data == null ? null : json_encode($data)));
         $response = $this->httpRequestService->send($httpClient,$request);
+        if($response->getStatusCode() != 200){
+            throw new Exception('error occurred');
+        }
         
         $content = $response->getBody()->getContents();
         echo "****CONTENT:" . $content . "****";
@@ -67,7 +70,11 @@ class SmsService implements ISmsService{
         }else{
             $httpClient = $this->httpRequestService->getHttpClient();
         }
-        $request = HttpRequestFactory::create('GET', $url);
+        $request = MessageFactoryDiscovery::find()->createRequest('GET', $url);
+        if($response->getStatusCode() != 200){
+            throw new Exception('error occurred');
+        }
+        
         $content = $this->httpRequestService->send($httpClient,$request);
         echo "****CONTENT:" . $content . "****";
         return $content;
