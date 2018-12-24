@@ -2,6 +2,9 @@
 
 namespace TritonTel\Services\SmsService;
 
+use Http\Message\Authentication\Bearer;
+use TritonTel\Services\HttpRequestFactory;
+
 class SmsService implements ISmsService{
     
     private $httpRequestService;
@@ -22,6 +25,14 @@ class SmsService implements ISmsService{
     }
     
     /**
+     * Defines Authentication type for API
+     * @return Bearer
+     */
+    private function getAPIAuth(){
+        return new Bearer($this->smsServiceSettings->getToken());
+    }
+    
+    /**
      * sends request of type POST
      * @param string $url
      * @param array $data
@@ -29,11 +40,15 @@ class SmsService implements ISmsService{
      * @return string
      */
     private function sendPostRequest($url,$data, $auth=true){
-        $headers = [];
+        $httpClient = null;
         if($auth){
-            $headers[] = 'Authorization: Bearer ' . $this->smsServiceSettings->getToken();
+            $httpClient = $this->httpRequestService->getHttpClient($this->getAPIAuth());
+        }else{
+            $httpClient = $this->httpRequestService->getHttpClient();
         }
-        $content = $this->httpRequestService->send('POST', $url, $data, $headers);
+        $request = HttpRequestFactory::create('POST', $url, [], $data);
+        $content = $this->httpRequestService->send($httpClient,$request);
+        
         echo "****CONTENT:" . $content . "****";
         return $content;
     }
@@ -45,11 +60,14 @@ class SmsService implements ISmsService{
      * @return string
      */
     private function sendGetRequest($url, $auth=true){
-        $headers = [];
+        $httpClient = null;
         if($auth){
-            $headers[] = 'Authorization: Bearer ' . $this->smsServiceSettings->getToken();
+            $httpClient = $this->httpRequestService->getHttpClient($this->getAPIAuth());
+        }else{
+            $httpClient = $this->httpRequestService->getHttpClient();
         }
-        $content = $this->httpRequestService->send('GET', $url, [], $headers);
+        $request = HttpRequestFactory::create('GET', $url);
+        $content = $this->httpRequestService->send($httpClient,$request);
         echo "****CONTENT:" . $content . "****";
         return $content;
     }
