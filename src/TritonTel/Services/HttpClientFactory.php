@@ -5,6 +5,8 @@ use Http\Client\HttpClient;
 use Http\Client\Common\Plugin;
 use Http\Client\Common\PluginClient;
 use Http\Client\Common\Plugin\AuthenticationPlugin;
+use Http\Client\Common\Plugin\ContentLengthPlugin;
+use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Client\Common\Plugin\ErrorPlugin;
 use Http\Discovery\HttpClientDiscovery;
 

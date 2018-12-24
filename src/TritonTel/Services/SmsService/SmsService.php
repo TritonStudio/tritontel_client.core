@@ -46,9 +46,10 @@ class SmsService implements ISmsService{
         }else{
             $httpClient = $this->httpRequestService->getHttpClient();
         }
-        $request = HttpRequestFactory::create('POST', $url, [], $data);
-        $content = $this->httpRequestService->send($httpClient,$request);
+        $request = HttpRequestFactory::create('POST', $url, [], ($data == null ? null : json_encode($data)));
+        $response = $this->httpRequestService->send($httpClient,$request);
         
+        $content = $response->getBody()->getContents();
         echo "****CONTENT:" . $content . "****";
         return $content;
     }
