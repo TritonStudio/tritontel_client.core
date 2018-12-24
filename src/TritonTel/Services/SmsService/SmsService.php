@@ -7,9 +7,9 @@ class SmsService implements ISmsService{
     private $httpRequestService;
     private $smsServiceSettings;
     
-    function __construct($httpServiceService, $smsServiceSettings) {
+    function __construct($httpRequestService, $smsServiceSettings) {
         echo "|SmsService constructor|";
-        $this->httpRequestService = $httpServiceService;
+        $this->httpRequestService = $httpRequestService;
         $this->smsServiceSettings = $smsServiceSettings;
     }
     
