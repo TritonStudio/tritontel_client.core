@@ -13,7 +13,6 @@ class SmsServiceSettings extends Settings {
     }
     
     protected function loadSettings() {
-        echo '|loading settings|';
         return [
                 Settings::FIELD_KEY_HOST => $this->host,
                 Settings::FIELD_KEY_REGISTER_ENDPOINT => '/api/Account/Register',
@@ -27,7 +26,6 @@ class SmsServiceSettings extends Settings {
     }
 
     protected function saveSettings($settings) {
-        echo '|saving settings|';
         var_dump($settings);
         return true;
     }

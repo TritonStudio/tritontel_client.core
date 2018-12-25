@@ -2,57 +2,29 @@
 
 namespace TritonTel\Services\SmsService;
 
-use Http\Message\Authentication\Bearer;
-use Http\Discovery\MessageFactoryDiscovery;
 
 class SmsService implements ISmsService{
     
     private $httpRequestService;
-    private $smsServiceSettings;
+    public $smsServiceSettings;
     
     function __construct($httpRequestService, $smsServiceSettings) {
-        echo "|SmsService constructor|";
         $this->httpRequestService = $httpRequestService;
         $this->smsServiceSettings = $smsServiceSettings;
-    }
-    
-    public function check(){
-        echo "|SmsService check|";
     }
     
     private function getEndpointFullUrl($endpointUrl){
         return $this->smsServiceSettings->getHost() . $endpointUrl;
     }
-    
-    /**
-     * Defines Authentication type for API
-     * @return Bearer
-     */
-    private function getAPIAuth(){
-        return new Bearer($this->smsServiceSettings->getToken());
-    }
-    
+
     /**
      * sends request of type POST
      * @param string $url
      * @param array $data
-     * @param bool $auth
      * @return string
      */
-    private function sendPostRequest($url,$data, $auth=true){
-        $httpClient = null;
-        if($auth){
-            $httpClient = $this->httpRequestService->getHttpClient($this->getAPIAuth());
-        }else{
-            $httpClient = $this->httpRequestService->getHttpClient();
-        }
-        $request = MessageFactoryDiscovery::find()->createRequest('POST', $url, [], ($data == null ? null : json_encode($data)));
-        $response = $this->httpRequestService->send($httpClient,$request);
-        if($response->getStatusCode() != 200){
-            throw new Exception('error occurred');
-        }
-        
-        $content = $response->getBody()->getContents();
+    private function sendPOST($url,$data){
+        $content = $this->httpRequestService->APIRequestPOST($url,$data,$this->smsServiceSettings->getToken());
         echo "****CONTENT:" . $content . "****";
         return $content;
     }
@@ -60,28 +32,12 @@ class SmsService implements ISmsService{
     /**
      * sends request of type GET
      * @param string $url
-     * @param bool $auth
      * @return string
      */
-    private function sendGetRequest($url, $auth=true){
-        $httpClient = null;
-        if($auth){
-            $httpClient = $this->httpRequestService->getHttpClient($this->getAPIAuth());
-        }else{
-            $httpClient = $this->httpRequestService->getHttpClient();
-        }
-        $request = MessageFactoryDiscovery::find()->createRequest('GET', $url);
-        if($response->getStatusCode() != 200){
-            throw new Exception('error occurred');
-        }
-        
-        $content = $this->httpRequestService->send($httpClient,$request);
+    private function sendGET($url){
+        $content = $this->httpRequestService->APIRequestGET($url,$this->smsServiceSettings->getToken());
         echo "****CONTENT:" . $content . "****";
         return $content;
-    }
-
-    public function authenticate() {
-        
     }
     
     public function register($email, $phone, $password, $company, $serviceName) {
@@ -93,10 +49,10 @@ class SmsService implements ISmsService{
             'companyName' => $company,
             'serviceName' => $serviceName
         ];
-        $content = $this->sendPostRequest(
+        $content = $this->sendPOST(
                 $this->getEndpointFullUrl($this->smsServiceSettings->getRegisterEndpoint()),
-                $data,
-                false);
+                $data
+                );
         
         $content_obj = json_decode($content);
         if($content_obj){
@@ -113,9 +69,10 @@ class SmsService implements ISmsService{
             'templateId' => $templateId,
             'messagePattern' => $messagePattern
         ];
-        $content = $this->sendPostRequest(
+        $content = $this->sendPOST(
                 $this->getEndpointFullUrl($this->smsServiceSettings->getSendSecretCodeEndpoint()),
-                $data);
+                $data
+                );
     }
     
     public function secretCodesVerify($phone, $code){
@@ -124,9 +81,10 @@ class SmsService implements ISmsService{
             'phone' => $phone,
             'code' => $code
         ];
-        $content = $this->sendPostRequest(
+        $content = $this->sendPOST(
                 $this->getEndpointFullUrl($this->smsServiceSettings->getVerifySecretCodeEndpoint()),
-                $data);
+                $data
+                );
     }
     
     public function messagesSend($recipient, $message){
@@ -135,21 +93,24 @@ class SmsService implements ISmsService{
             'recipient' => $recipient,
             'message' => $message
         ];
-        $content = $this->sendPostRequest(
+        $content = $this->sendPOST(
                 $this->getEndpointFullUrl($this->smsServiceSettings->getSendMesagesEndpoint()),
-                $data);
+                $data
+                );
     }
     
     public function valuesGetCompanyData(){
         echo "|SmsServiceClient GetCompanyData implementation|";
-        $content = $this->sendGetRequest($this->getEndpointFullUrl($this->smsServiceSettings->getGetCompanyDataEndpoint()));
+        $content = $this->sendGET(
+                $this->getEndpointFullUrl($this->smsServiceSettings->getGetCompanyDataEndpoint())
+                );
     }
     
     public function logout(){
         echo "|SmsServiceClient logout implementation|";
-        $content = $this->sendPostRequest(
-                $this->getEndpointFullUrl($this->smsServiceSettings->getSendMesagesEndpoint()),
-                []);
+        $content = $this->sendPOST(
+                $this->getEndpointFullUrl($this->smsServiceSettings->getSendMesagesEndpoint())
+                );
         echo "****done****";
     }
 
