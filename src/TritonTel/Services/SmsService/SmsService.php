@@ -2,6 +2,8 @@
 
 namespace TritonTel\Services\SmsService;
 
+use \GuzzleHttp;
+
 
 class SmsService implements ISmsService{
     
@@ -59,6 +61,7 @@ class SmsService implements ISmsService{
             $this->smsServiceSettings->setToken($content_obj->access_token);
             $this->smsServiceSettings->save();//TODO: Remove later?
         }
+        return $content_obj;
     }
 
     
@@ -73,6 +76,7 @@ class SmsService implements ISmsService{
                 $this->getEndpointFullUrl($this->smsServiceSettings->getSendSecretCodeEndpoint()),
                 $data
                 );
+        return json_decode($content);
     }
     
     public function secretCodesVerify($phone, $code){
@@ -85,6 +89,7 @@ class SmsService implements ISmsService{
                 $this->getEndpointFullUrl($this->smsServiceSettings->getVerifySecretCodeEndpoint()),
                 $data
                 );
+        return json_decode($content);
     }
     
     public function messagesSend($recipient, $message){
@@ -97,6 +102,7 @@ class SmsService implements ISmsService{
                 $this->getEndpointFullUrl($this->smsServiceSettings->getSendMesagesEndpoint()),
                 $data
                 );
+        return json_decode($content);
     }
     
     public function valuesGetCompanyData(){
@@ -104,6 +110,7 @@ class SmsService implements ISmsService{
         $content = $this->sendGET(
                 $this->getEndpointFullUrl($this->smsServiceSettings->getGetCompanyDataEndpoint())
                 );
+        return json_decode($content);
     }
     
     public function logout(){
@@ -112,6 +119,7 @@ class SmsService implements ISmsService{
                 $this->getEndpointFullUrl($this->smsServiceSettings->getSendMesagesEndpoint())
                 );
         echo "****done****";
+        return json_decode($content);
     }
 
 }
