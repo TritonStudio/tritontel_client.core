@@ -24,7 +24,6 @@ class SmsService implements ISmsService{
      */
     private function sendPOST($url,$data){
         $content = $this->httpRequestService->APIRequestPOST($url,$data,$this->smsServiceSettings->getToken());
-        echo "test";
         return json_encode($content);
     }
     
