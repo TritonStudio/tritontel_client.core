@@ -2,9 +2,6 @@
 
 namespace TritonTel\Services\SmsService;
 
-use \GuzzleHttp;
-
-
 class SmsService implements ISmsService{
     
     private $httpRequestService;
@@ -27,8 +24,7 @@ class SmsService implements ISmsService{
      */
     private function sendPOST($url,$data){
         $content = $this->httpRequestService->APIRequestPOST($url,$data,$this->smsServiceSettings->getToken());
-        echo "****CONTENT:" . $content . "****";
-        return $content;
+        return json_encode($content);
     }
     
     /**
@@ -38,12 +34,10 @@ class SmsService implements ISmsService{
      */
     private function sendGET($url){
         $content = $this->httpRequestService->APIRequestGET($url,$this->smsServiceSettings->getToken());
-        echo "****CONTENT:" . $content . "****";
-        return $content;
+        return json_encode($content);
     }
     
     public function register($email, $phone, $password, $company, $serviceName) {
-        echo "|SmsServiceClient register implementation|";
         $data = [
             'email' => $email,
             'phone' => $phone,
@@ -66,7 +60,6 @@ class SmsService implements ISmsService{
 
     
     public function secretCodesSend($phone, $templateId = null, $messagePattern = null){
-        echo "|SmsServiceClient secretCodesSend implementation|";
         $data = [
             'phone' => $phone,
             'templateId' => $templateId,
@@ -80,7 +73,6 @@ class SmsService implements ISmsService{
     }
     
     public function secretCodesVerify($phone, $code){
-        echo "|SmsServiceClient secretCodesVerify implementation|";
         $data = [
             'phone' => $phone,
             'code' => $code
@@ -93,7 +85,6 @@ class SmsService implements ISmsService{
     }
     
     public function messagesSend($recipient, $message){
-        echo "|SmsServiceClient messagesSend implementation|";
         $data = [
             'recipient' => $recipient,
             'message' => $message
@@ -106,7 +97,6 @@ class SmsService implements ISmsService{
     }
     
     public function valuesGetCompanyData(){
-        echo "|SmsServiceClient GetCompanyData implementation|";
         $content = $this->sendGET(
                 $this->getEndpointFullUrl($this->smsServiceSettings->getGetCompanyDataEndpoint())
                 );
@@ -114,11 +104,9 @@ class SmsService implements ISmsService{
     }
     
     public function logout(){
-        echo "|SmsServiceClient logout implementation|";
         $content = $this->sendPOST(
                 $this->getEndpointFullUrl($this->smsServiceSettings->getSendMesagesEndpoint())
                 );
-        echo "****done****";
         return json_decode($content);
     }
 
