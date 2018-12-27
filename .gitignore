@@ -1,1 +1,4 @@
 /nbproject/
+/composer.json
+/src/TritonTel/Services/HttpClientFactory.php
+/src/TritonTel/Services/HttpRequestService.php
