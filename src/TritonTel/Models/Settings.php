@@ -13,8 +13,14 @@ abstract class Settings implements ISettings {
     const FIELD_KEY_TOKEN = 'token';
     
     
-    protected $settings;
+    protected $settings = [];
     
+    public function __construct($host) {
+        $this->settings = $this->loadSettings();
+        $this->setHost($host);
+    }
+
+
     public function getHost(){
         return $this->get(self::FIELD_KEY_HOST);
     }
@@ -24,51 +30,27 @@ abstract class Settings implements ISettings {
     }
     
     public function getRegisterEndpoint(){
-        return $this->get(self::FIELD_KEY_REGISTER_ENDPOINT);
-    }
-    
-    public function setRegisterEndpoint($registerEndpoint){
-        $this->settings[self::FIELD_KEY_REGISTER_ENDPOINT] = $registerEndpoint;
+        return '/api/Account/Register';
     }
     
     public function getSendSecretCodeEndpoint(){
-        return $this->get(self::FIELD_KEY_SECRET_CODES_SEND_ENDPOINT);
-    }
-    
-    public function setSendSecretCodeEndpoint($sendSecretCodeEndpoint){
-        $this->settings[self::FIELD_KEY_SECRET_CODES_SEND_ENDPOINT] = $sendSecretCodeEndpoint;
+        return '/api/SecretCodes/Send';
     }
     
     public function getVerifySecretCodeEndpoint(){
-        return $this->get(self::FIELD_KEY_SECRET_CODES_VERIFY_ENDPOINT);
-    }
-    
-    public function setVerifySecretCodeEndpoint($verifySecretCodeEndpoint){
-        $this->settings[self::FIELD_KEY_SECRET_CODES_VERIFY_ENDPOINT] = $verifySecretCodeEndpoint;
+        return '/api/SecretCodes/Verify';
     }
     
     public function getSendMesagesEndpoint(){
-        return $this->get(self::FIELD_KEY_MESSAGES_SEND_ENDPOINT);
-    }
-    
-    public function setSendMessagesEndpoint($sendMessagesEndpoint){
-        $this->settings[self::FIELD_KEY_MESSAGES_SEND_ENDPOINT] = $sendMessagesEndpoint;
+        return '/api/Messages/Send';
     }
     
     public function getGetCompanyDataEndpoint(){
-        return $this->get(self::FIELD_KEY_GET_COMPANY_DATA_ENDPOINT);
-    }
-    
-    public function setGetCompanyDataEndpoint($getCompanyDataEndpoint){
-        $this->settings[self::FIELD_KEY_GET_COMPANY_DATA_ENDPOINT] = $getCompanyDataEndpoint;
+        return '';
     }
     
     public function getLogoutEndpoint(){
-        return $this->get(self::FIELD_KEY_LOGOUT_ENDPOINT);
-    }
-    
-    public function setLogoutEndpoint($logoutEndpoint){
-        $this->settings[self::FIELD_KEY_LOGOUT_ENDPOINT] = $logoutEndpoint;
+        return '/api/Account/Logout';
     }
     
     public function getToken(){
@@ -80,10 +62,7 @@ abstract class Settings implements ISettings {
     }
     
     public function get($key = NULL){
-        if(empty($this->settings)){
-            $this->settings = $this->loadSettings();
-        }
-        if($key !== NULL){
+        if(!empty($key)){
             if(isset($this->settings[$key])){
                 return $this->settings[$key];
             }
