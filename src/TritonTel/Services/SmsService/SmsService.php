@@ -84,14 +84,17 @@ class SmsService implements ISmsService{
         return json_decode($content);
     }
     
-    public function messagesSend($recipient, $message){
-        $data = [
+    public function messagesSend($recipient, $message, $data = null){
+        $twigLoader = new \Twig_Loader_Array(['index' => $message]);
+        $twig = new \Twig_Environment($twigLoader);
+        
+        $postData = [
             'recipient' => $recipient,
-            'message' => $message
+            'message' => $twig->render('index', $data)
         ];
         $content = $this->sendPOST(
                 $this->getEndpointFullUrl($this->smsServiceSettings->getSendMesagesEndpoint()),
-                $data
+                $postData
                 );
         return json_decode($content);
     }

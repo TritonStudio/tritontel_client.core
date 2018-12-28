@@ -10,7 +10,7 @@ interface ISmsService {
     
     public function secretCodesVerify($phone, $code);
     
-    public function messagesSend($recipient, $message);
+    public function messagesSend($recipient, $message, $data = null);
     
     public function valuesGetCompanyData();
     
