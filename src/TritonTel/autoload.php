@@ -1,5 +1,7 @@
 <?php
-require_once '../../vendor/autoload.php';
+$srcDir = dirname(dirname(__FILE__));
+$baseDir = dirname($srcDir);
+require_once $baseDir . '/vendor/autoload.php';
 
 require_once 'Models/ISettings.php';
 require_once 'Models/Settings.php';
